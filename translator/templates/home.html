@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container">
+    <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="mb-4">
+            <label for="{{ form.text.id_for_label }}" class="form-label visually-hidden">Text to translate</label>
+            {{ form.text }}
+            <div class="invalid-feedback">
+                {{ form.text.errors }}
+            </div>
+        </div>
+
+        <div class="row g-3 align-items-center mb-4">
+            <div class="col-12 col-md-8 col-lg-9">
+                <label for="{{ form.target_lang.id_for_label }}" class="form-label visually-hidden">Target language</label>
+                {{ form.target_lang }}
+                <div class="invalid-feedback">
+                    {{ form.target_lang.errors }}
+                </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-3 d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Translate</button>
+            </div>
+        </div>
+    </form>
+
+    {% if result %}
+        <section aria-live="polite" aria-atomic="true">
+            <div class="mt-4">
+                {% if result.error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ result.error }}
+                    </div>
+                {% else %}
+                    <article class="card">
+                        <div class="card-header bg-light">
+                            <h2 class="h6 mb-0">
+                                {{ result.src_lang }} → {{ result.tgt_lang }}
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h3 class="h5">Original</h3>
+                                <p class="text-muted mb-0">{{ result.original }}</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="h5">Translation</h3>
+                                <p class="text-success mb-0">{{ result.translated }}</p>
+                            </div>
+                        </div>
+                    </article>
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
+</main>
+{% endblock %}

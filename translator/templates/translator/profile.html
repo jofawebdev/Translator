@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+<main class="container mt-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="media">
+        <div class="media-body">
+            <h2 class="mb-4 account-heading">{{ user.username }} Profile</h2>
+            <p class="text-secondary">{{ user.email }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <p>
+                <strong>{% trans "Preferred Target Language:" %}</strong>
+                {{ profile.preferred_target_language }}
+            </p>
+            <p>
+                <strong>{% trans "Favorite Phrases:" %}</strong>
+            </p>
+            <pre class="bg-light p-2">{{ profile.favorite_phrases }}</pre>
+            <p>
+                <strong>{% trans "Total Translations:" %}</strong> {{ translation_count }}
+            </p>
+            <br>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4 text-center">Profile Info</legend>
+                    {{ u_form|crispy }}
+                    {{ p_form|crispy }}
+                </fieldset>
+
+                <div class="row g-2 mt-3">
+                    <div class="col-12 col-md-auto">
+                        <div class="form-group mb-3">
+                            <button class="btn btn-outline-info w-100" type="submit">Update Profile</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                        <a href="{% url 'translation_history' %}" class="btn btn-info w-100">
+                            {% trans "View Translation History" %}
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</main>
+{% endblock %}
