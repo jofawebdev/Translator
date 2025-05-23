@@ -24,6 +24,7 @@ def home(request):
                 translator = Translator()
                 text = form.cleaned_data['text']
                 target_lang = form.cleaned_data['target_lang']
+
                 # Detect the source language and translate the text
                 detection = translator.detect(text)
                 translated = translator.translate(text, dest=target_lang)
@@ -64,6 +65,7 @@ def home(request):
     })
 
 
+# Register View
 def register(request):
     """
     View for user registration.
@@ -85,6 +87,7 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
     
 
+# Profile View
 @login_required
 def profile(request):
     # Get or create profile if it doesn't exist
@@ -115,6 +118,7 @@ def profile(request):
     return render(request, 'translator/profile.html', context)
 
 
+# Begin Translation View for logged in users
 @login_required
 def translation_history(request):
     """
@@ -126,6 +130,7 @@ def translation_history(request):
     return render(request, 'translator/translation_history.html', {'history': history})
 
 
+# Delete Translation for logged-in user
 @login_required
 def delete_translation(request, translation_id):
     translation = get_object_or_404(Translation, id=translation_id, user=request.user)
